@@ -7,7 +7,10 @@ let _openai: OpenAI | null = null
 const SYSTEM_PROMPT = `
   You will be given an image and a language. 
   You will return the alt text for it taking into account best SEO and accessibility practices in the given language.
+  
   Only return the alt text, do not add any other text.
+
+  If you are not able to load the image, or are not able to generate an alt text for the given image, return the text "ERROR" and nothing else.
   `
 
 const getOpenAI = (event: H3Event) => {
@@ -62,6 +65,20 @@ export default defineCachedEventHandler(async (event) => {
       },
     ],
   })
+
+  if (response.error) {
+    return createError({
+      statusCode: 424,
+      statusMessage: response.error.message,
+    })
+  }
+
+  if (response.output_text === 'ERROR') {
+    return createError({
+      statusCode: 424,
+      statusMessage: 'Unable to load the image',
+    })
+  }
 
   return response.output_text
 }, {
