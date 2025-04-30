@@ -8,8 +8,6 @@ const { alt, error } = useGenerateAltText({
 
 <template>
   <div>
-    Nuxt module playground!
-
     <img
       :src
       :alt
