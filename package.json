@@ -1,8 +1,8 @@
 {
-  "name": "my-module",
+  "name": "nuxt-alt-generator",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "description": "Nuxt module that generates alt text for images using AI",
+  "repository": "your-org/nuxt-alt-generator",
   "license": "MIT",
   "type": "module",
   "exports": {
