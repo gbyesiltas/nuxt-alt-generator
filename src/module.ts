@@ -3,7 +3,10 @@ import { defu } from 'defu'
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
-  openApiKey?: string
+  ai: {
+    apiKey: string
+    baseUrl: string
+  }
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -15,12 +18,14 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {},
   setup(options, nuxt) {
-    // Register the openApiKey in the runtime config
+    // Register the apiKey in the runtime config
     nuxt.options.runtimeConfig.altGenerator = defu(
       nuxt.options.runtimeConfig.altGenerator || {},
       {
-        // @todo maybe get this from the env
-        openApiKey: options.openApiKey,
+        ai: {
+          apiKey: options.ai.apiKey,
+          baseUrl: options.ai.baseUrl,
+        },
       },
     )
 
