@@ -5,6 +5,7 @@ import { createError, defineCachedEventHandler, readBody, useRuntimeConfig } fro
 let _openai: OpenAI | null = null
 
 // @todo: i18n support
+// maybe even automatic connection to nuxt-i18n
 const SYSTEM_PROMPT = `
   You will be given an image and will return the alt text for it taking into account best SEO and accessibility practices.
   Only return the alt text, do not add any other text.
