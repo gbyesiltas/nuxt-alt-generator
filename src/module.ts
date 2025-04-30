@@ -10,6 +10,7 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'nuxt-alt-generator',
     configKey: 'altGenerator',
+    // @todo look other options
   },
   // Default configuration options of the Nuxt module
   defaults: {},
@@ -18,6 +19,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.altGenerator = defu(
       nuxt.options.runtimeConfig.altGenerator || {},
       {
+        // @todo maybe get this from the env
         openApiKey: options.openApiKey,
       },
     )
