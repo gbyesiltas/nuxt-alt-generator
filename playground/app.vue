@@ -1,44 +1,25 @@
 <script setup lang="ts">
-const input = ref('')
-const alt = ref('')
-const lang = ref('en')
-
-const generateAlt = async () => {
-  alt.value = await $fetch('/api/__alt__/generate', {
-    method: 'POST',
-    body: {
-      src: input.value,
-      lang: lang.value,
-    },
-  })
-}
+const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=jpg'
+const { alt, error } = useGenerateAltText({
+  src,
+  lang: 'tr',
+})
 </script>
 
 <template>
   <div>
     Nuxt module playground!
 
-    <input
-      v-model="input"
-      type="text"
-      placeholder="Type something..."
+    <img
+      :src
+      :alt
+      width="300"
     >
 
-    <select v-model="lang">
-      <option value="en">
-        English
-      </option>
-      <option value="fr">
-        French
-      </option>
-      <option value="tr">
-        Turkish
-      </option>
-    </select>
-
-    <button @click="generateAlt">
-      Generate alt
-    </button>
+    <div v-if="error">
+      <h2>Error</h2>
+      <p>{{ error }}</p>
+    </div>
 
     <div v-if="alt">
       <h2>Generated alt</h2>

@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver, addServerHandler } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerHandler, addImports } from '@nuxt/kit'
 import { defu } from 'defu'
 
 // Module options TypeScript interface definition
@@ -23,17 +23,24 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.runtimeConfig.altGenerator || {},
       {
         ai: {
-          apiKey: options.ai.apiKey,
-          baseUrl: options.ai.baseUrl,
+          apiKey: options.ai?.apiKey,
+          baseUrl: options.ai?.baseUrl,
         },
       },
     )
 
     const resolver = createResolver(import.meta.url)
+
     addServerHandler({
       route: '/api/__alt__/generate',
       handler: resolver.resolve('./runtime/server/api/__alt__/generate.post'),
       method: 'post',
+    })
+
+    addImports({
+      name: 'useGenerateAltText',
+      as: 'useGenerateAltText',
+      from: resolver.resolve('runtime/composables/useGenerateAltText'),
     })
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
