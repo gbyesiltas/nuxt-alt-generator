@@ -6,3 +6,10 @@
 
 <script setup>
 </script>
+
+<style>
+body {
+  background: black;
+  color: lightgray;
+}
+</style>

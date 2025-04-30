@@ -34,7 +34,8 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.17.1"
+    "@nuxt/kit": "^3.17.1",
+    "openai": "^4.96.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.4.0",
