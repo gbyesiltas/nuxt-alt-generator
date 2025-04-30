@@ -31,8 +31,9 @@ export default defineNuxtModule<ModuleOptions>({
 
     const resolver = createResolver(import.meta.url)
     addServerHandler({
-      route: '/api/__alt__/:src',
-      handler: resolver.resolve('./runtime/server/api/__alt__/[src]'),
+      route: '/api/__alt__/generate',
+      handler: resolver.resolve('./runtime/server/api/__alt__/generate.post'),
+      method: 'post',
     })
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
