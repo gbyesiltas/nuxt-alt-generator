@@ -4,10 +4,9 @@ import { createError, defineCachedEventHandler, readBody, useRuntimeConfig } fro
 
 let _openai: OpenAI | null = null
 
-// @todo: i18n support
-// maybe even automatic connection to nuxt-i18n
 const SYSTEM_PROMPT = `
-  You will be given an image and will return the alt text for it taking into account best SEO and accessibility practices.
+  You will be given an image and a language. 
+  You will return the alt text for it taking into account best SEO and accessibility practices in the given language.
   Only return the alt text, do not add any other text.
   `
 
@@ -28,6 +27,8 @@ const getOpenAI = (event: H3Event) => {
 
 export default defineCachedEventHandler(async (event) => {
   const src = (await readBody(event))?.src
+  const lang = (await readBody(event))?.lang ?? 'en' // @todo nuxt-i18n connection?
+
   if (!src) {
     return createError({
       statusCode: 400,
@@ -49,9 +50,13 @@ export default defineCachedEventHandler(async (event) => {
         role: 'user',
         content: [
           {
+            type: 'input_text',
+            text: `Generate an alt text for the image in ${lang}`,
+          },
+          {
             type: 'input_image',
             image_url: src,
-            detail: 'auto',
+            detail: 'low',
           },
         ],
       },
@@ -64,6 +69,8 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: 60 * 60 * 24 * 365 /* 1 year */,
   getKey: async (event) => {
     const src = (await readBody(event))?.src
-    return `generate-alt-${src}`
+    const lang = (await readBody(event))?.lang ?? 'en'
+
+    return `generate-alt-${src}-${lang}`
   },
 })
