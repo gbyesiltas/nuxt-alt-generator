@@ -66,6 +66,8 @@ export default defineCachedEventHandler(async (event) => {
     ],
   })
 
+  // @todo don't cache if the response is an error?
+
   if (response.error) {
     return createError({
       statusCode: 424,
