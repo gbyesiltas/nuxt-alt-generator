@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=jpg'
+const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5'
 const { alt, error } = useGenerateAltText({
   src,
-  lang: 'tr',
+  lang: 'en',
 })
 </script>
 

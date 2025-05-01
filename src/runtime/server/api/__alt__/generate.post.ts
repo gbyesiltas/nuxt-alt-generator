@@ -9,8 +9,6 @@ const SYSTEM_PROMPT = `
   You will return the alt text for it taking into account best SEO and accessibility practices in the given language.
   
   Only return the alt text, do not add any other text.
-
-  If you are not able to load the image, or are not able to generate an alt text for the given image, return the text "ERROR" and nothing else.
   `
 
 const getOpenAI = (event: H3Event) => {
@@ -33,7 +31,7 @@ export default defineCachedEventHandler(async (event) => {
   const lang = (await readBody(event))?.lang ?? 'en' // @todo nuxt-i18n connection?
 
   if (!src) {
-    return createError({
+    throw createError({
       statusCode: 400,
       statusMessage: 'Missing src parameter',
     })
@@ -44,6 +42,8 @@ export default defineCachedEventHandler(async (event) => {
   const response = await instance.responses.create({
     // @todo: add support for other models
     model: 'gpt-4.1-nano',
+    temperature: 0.1,
+    store: true,
     input: [
       {
         role: 'user',
@@ -53,13 +53,13 @@ export default defineCachedEventHandler(async (event) => {
         role: 'user',
         content: [
           {
-            type: 'input_text',
-            text: `Generate an alt text for the image in ${lang}`,
-          },
-          {
             type: 'input_image',
             image_url: src,
             detail: 'low',
+          },
+          {
+            type: 'input_text',
+            text: `Language code: ${lang}`,
           },
         ],
       },
@@ -69,14 +69,14 @@ export default defineCachedEventHandler(async (event) => {
   // @todo don't cache if the response is an error?
 
   if (response.error) {
-    return createError({
+    throw createError({
       statusCode: 424,
       statusMessage: response.error.message,
     })
   }
 
   if (response.output_text === 'ERROR') {
-    return createError({
+    throw createError({
       statusCode: 424,
       statusMessage: 'Unable to load the image',
     })
