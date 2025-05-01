@@ -1,24 +1,14 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: nuxt-alt-generator
-- Description: My new Nuxt module
--->
-
-# My Module
+# Nuxt Alt Generator
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+This is a Nuxt module that allows tools to automatically generate alt text for images in your Nuxt application.
+It uses the [OpenAI API](https://platform.openai.com/docs/api-reference/images/generate) to generate alt text based on the content of the image.
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-alt-generator?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+⚠️ **This module is in early development and not yet ready for production use.**
 
 ## Features
 
