@@ -1,4 +1,4 @@
-import { computed, toValue, type MaybeRefOrGetter } from 'vue'
+import { computed, toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'
 import { useFetch } from '#app'
 
 type Options = {
@@ -6,7 +6,12 @@ type Options = {
   lang?: MaybeRefOrGetter<string>
 }
 
-export function useGenerateAltText(options: Options) {
+type Response = {
+  alt: ComputedRef<string | undefined>
+  error: ComputedRef<boolean>
+}
+
+export function useGenerateAltText(options: Options): Response {
   const fetchResponse = useFetch<string>('/api/__alt__/generate', {
     method: 'POST',
     body: {
@@ -16,9 +21,10 @@ export function useGenerateAltText(options: Options) {
   })
 
   const alt = computed(() => fetchResponse.data.value ?? undefined)
+  const error = computed(() => !!fetchResponse.error.value)
 
   return {
     alt,
-    ...fetchResponse,
+    error,
   }
 };

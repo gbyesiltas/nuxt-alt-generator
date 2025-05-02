@@ -23,6 +23,7 @@
     "dist"
   ],
   "scripts": {
+    "prepare": "nuxt-module-build prepare",
     "prepack": "nuxt-module-build build",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
@@ -38,7 +39,8 @@
     "openai": "^4.96.2"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.17.1"
+    "@nuxt/kit": "^3.17.1",
+    "defu": "^6.1.4"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.4.0",

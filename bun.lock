@@ -5,8 +5,7 @@
       "name": "nuxt-alt-generator",
       "dependencies": {
         "@nuxt/kit": "^3.17.1",
-        "cheerio": "^1.0.0",
-        "openai": "^4.96.2",
+        "defu": "^6.1.4",
       },
       "devDependencies": {
         "@nuxt/devtools": "^2.4.0",
@@ -21,6 +20,10 @@
         "typescript": "~5.8.3",
         "vitest": "^3.1.2",
         "vue-tsc": "^2.2.10",
+      },
+      "peerDependencies": {
+        "cheerio": "^1.0.0",
+        "openai": "^4.96.2",
       },
     },
   },
