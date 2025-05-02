@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.17.1",
+    "cheerio": "^1.0.0",
     "openai": "^4.96.2"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver, addServerHandler, addImports } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerHandler, addImports, addServerPlugin } from '@nuxt/kit'
 import { defu } from 'defu'
 
 // Module options TypeScript interface definition
@@ -43,7 +43,9 @@ export default defineNuxtModule<ModuleOptions>({
       from: resolver.resolve('runtime/composables/useGenerateAltText'),
     })
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    // addPlugin(resolver.resolve('./runtime/plugin'))
+    // server dom generation for ssr
+    // app:resolve for spa
+    // prerender for static site generation
+    addServerPlugin(resolver.resolve('./runtime/server/plugins/addAltToImages'))
   },
 })
