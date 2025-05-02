@@ -1,6 +1,7 @@
 import { generateAltTextFromImage } from '../../utils/generateAltTextFromImage'
 import { createError, defineCachedEventHandler, readBody } from '#imports'
 
+// @todo somehow make this only accessible from our client and/or make the endpoint a config option
 export default defineCachedEventHandler(async (event) => {
   const src = (await readBody(event))?.src
   const lang = (await readBody(event))?.lang ?? 'en' // @todo nuxt-i18n connection?
@@ -15,7 +16,6 @@ export default defineCachedEventHandler(async (event) => {
   const response = await generateAltTextFromImage({ src, lang }, event)
 
   // @todo don't cache if the response is an error?
-
   if (response.error) {
     throw createError({
       statusCode: 424,

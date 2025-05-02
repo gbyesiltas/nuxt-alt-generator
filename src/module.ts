@@ -43,9 +43,8 @@ export default defineNuxtModule<ModuleOptions>({
       from: resolver.resolve('runtime/composables/useGenerateAltText'),
     })
 
-    // server dom generation for ssr
-    // app:resolve for spa
-    // prerender for static site generation
+    // @todo app:resolve for spa
+    // @todo prerender for static site generation
     addServerPlugin(resolver.resolve('./runtime/server/plugins/addAltToImages'))
   },
 })
