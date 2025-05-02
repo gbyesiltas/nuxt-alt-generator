@@ -4,21 +4,14 @@ import { generateAltTextFromImage } from '../utils/generateAltTextFromImage'
 import { defineNitroPlugin } from '#imports'
 
 const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) => {
-  const newBody = []
-
-  for (const root of htmlBody) {
+  const promises = htmlBody.map(async (root) => {
     const $ = cheerio.load(root)
-    const images = $('img')
+    const images = $('img').toArray()
 
-    for (const image of images) {
+    const altPromises = images.map(async (image) => {
       const src = $(image).attr('src')
-      if (!src) {
-        continue
-      }
-
-      const alt = $(image).attr('alt')
-      if (alt) {
-        continue
+      if (!src || $(image).attr('alt')) {
+        return
       }
 
       const response = await generateAltTextFromImage(
@@ -30,18 +23,18 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
       )
 
       $(image).attr('alt', response.output_text)
-    }
+    })
 
-    newBody.push($.html())
-  }
+    await Promise.all(altPromises)
+    return $.html()
+  })
 
-  return newBody
+  return await Promise.all(promises)
 }
 
 export default defineNitroPlugin((nitroApp) => {
-  // @todo make this an option
+  // @todo make this a config option
   nitroApp.hooks.hook('render:html', async (html, { event }) => {
-    // const newVersion = html.body[0].replace('<div id="__nuxt"><div><img src="https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=webp" width="300"></div></div>', '<div>example</div>')
     html.body = await addAltToImagesFromHtmlBody(html.body, event)
   })
 })
