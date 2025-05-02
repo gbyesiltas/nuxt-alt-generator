@@ -1,30 +1,5 @@
-import OpenAI from 'openai'
-import type { H3Event } from 'h3'
-import { createError, defineCachedEventHandler, readBody, useRuntimeConfig } from '#imports'
-
-let _openai: OpenAI | null = null
-
-const SYSTEM_PROMPT = `
-  You will be given an image and a language. 
-  You will return the alt text for it taking into account best SEO and accessibility practices in the given language.
-  
-  Only return the alt text, do not add any other text.
-  `
-
-const getOpenAI = (event: H3Event) => {
-  if (!_openai) {
-    // @todo: rename `ai` to `openai` in the runtime config
-    const apiKey = useRuntimeConfig(event).altGenerator.ai.apiKey
-    const baseURL = useRuntimeConfig(event).altGenerator.ai.baseUrl
-
-    _openai = new OpenAI({
-      baseURL,
-      apiKey,
-    })
-  }
-
-  return _openai
-}
+import { generateAltTextFromImage } from '../../utils/generateAltTextFromImage'
+import { createError, defineCachedEventHandler, readBody } from '#imports'
 
 export default defineCachedEventHandler(async (event) => {
   const src = (await readBody(event))?.src
@@ -37,34 +12,7 @@ export default defineCachedEventHandler(async (event) => {
     })
   }
 
-  const instance = getOpenAI(event)
-
-  const response = await instance.responses.create({
-    // @todo: add support for other models
-    model: 'gpt-4.1-nano',
-    temperature: 0.1,
-    store: true,
-    input: [
-      {
-        role: 'user',
-        content: SYSTEM_PROMPT,
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'input_image',
-            image_url: src,
-            detail: 'low',
-          },
-          {
-            type: 'input_text',
-            text: `Language code: ${lang}`,
-          },
-        ],
-      },
-    ],
-  })
+  const response = await generateAltTextFromImage({ src, lang }, event)
 
   // @todo don't cache if the response is an error?
 
