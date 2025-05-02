@@ -1,28 +1,13 @@
 <script setup lang="ts">
-const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5'
-const { alt, error } = useGenerateAltText({
-  src,
-  lang: 'en',
-})
+const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=webp'
 </script>
 
 <template>
   <div>
     <img
       :src
-      :alt
       width="300"
     >
-
-    <div v-if="error">
-      <h2>Error</h2>
-      <p>{{ error }}</p>
-    </div>
-
-    <div v-if="alt">
-      <h2>Generated alt</h2>
-      <p>{{ alt }}</p>
-    </div>
   </div>
 </template>
 
