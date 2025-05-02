@@ -1,5 +1,6 @@
 import type { H3Event } from 'h3'
 import { getOpenAI } from './openai'
+import { defineCachedFunction } from '#imports'
 
 const SYSTEM_PROMPT = `
   You will be given an image and a language. 
@@ -13,33 +14,38 @@ type Parameters = {
   lang: string
 }
 
-export const generateAltTextFromImage = async ({ src, lang }: Parameters, event: H3Event) => {
-  const instance = getOpenAI(event)
+export const generateAltTextFromImage = defineCachedFunction(
+  async ({ src, lang }: Parameters, event: H3Event) => {
+    const instance = getOpenAI(event)
 
-  return await instance.responses.create({
+    return await instance.responses.create({
     // @todo: add support for other models
-    model: 'gpt-4.1-nano',
-    temperature: 0.1,
-    store: true,
-    input: [
-      {
-        role: 'user',
-        content: SYSTEM_PROMPT,
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'input_image',
-            image_url: src,
-            detail: 'low',
-          },
-          {
-            type: 'input_text',
-            text: `Language code: ${lang}`,
-          },
-        ],
-      },
-    ],
+      model: 'gpt-4.1-nano',
+      temperature: 0.1,
+      store: true,
+      input: [
+        {
+          role: 'user',
+          content: SYSTEM_PROMPT,
+        },
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'input_image',
+              image_url: src,
+              detail: 'low',
+            },
+            {
+              type: 'input_text',
+              text: `Language code: ${lang}`,
+            },
+          ],
+        },
+      ],
+    })
+  }, {
+    // @todo make this configurable
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    getKey: ({ src, lang }) => `generated-alt:${src}:${lang}`,
   })
-}

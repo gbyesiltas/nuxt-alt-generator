@@ -31,13 +31,4 @@ export default defineCachedEventHandler(async (event) => {
   }
 
   return response.output_text
-}, {
-  // @todo make this configurable
-  maxAge: 60 * 60 * 24 * 365 /* 1 year */,
-  getKey: async (event) => {
-    const src = (await readBody(event))?.src
-    const lang = (await readBody(event))?.lang ?? 'en'
-
-    return `generate-alt-${src}-${lang}`
-  },
 })
