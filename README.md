@@ -8,7 +8,10 @@
 This is a Nuxt module that allows tools to automatically generate alt text for images in your Nuxt application.
 It uses the [OpenAI API](https://platform.openai.com/docs/api-reference/images/generate) to generate alt text based on the content of the image.
 
+
 ⚠️ **This module is in early development and not yet ready for production use.**
+
+@Todo add more docs: based on https://nuxt.com/docs/guide/going-further/modules#document-module-usage
 
 ## Features
 
