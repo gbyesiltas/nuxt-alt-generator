@@ -38,6 +38,7 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
 
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('render:html', async (html, { event }) => {
+    // @todo I sometimes see hydration mismatches --> look into it
     html.body = await addAltToImagesFromHtmlBody(html.body, event)
   })
 })
