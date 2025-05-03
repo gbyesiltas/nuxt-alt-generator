@@ -1,13 +1,25 @@
 import { defineNuxtModule, createResolver, addServerHandler, addImports, addServerPlugin } from '@nuxt/kit'
 import { defu } from 'defu'
 
-// Module options TypeScript interface definition
 export interface ModuleOptions {
+  /**
+   * Whether there will be a call to the AI API to generate alt text for images
+   * If `false`, the generated alt text will be a mock/example text.
+   *
+   * Will default to `false` in development mode.
+   *
+   * @default true
+   */
   enabled?: boolean
+  /**
+   * Whether to automatically generate and inject alt text for images in server-rendered pages.
+   *
+   * @default true
+   */
   auto?: boolean
   ai: {
     apiKey: string
-    baseUrl: string
+    baseUrl?: string
   }
 }
 
@@ -19,14 +31,22 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {
     auto: true,
+    ai: {
+      apiKey: '',
+      baseUrl: '',
+    },
   },
   setup(options, nuxt) {
     // Merge module options with runtime config
     nuxt.options.runtimeConfig.altGenerator = defu(
       nuxt.options.runtimeConfig.altGenerator || {},
       {
-        ...options,
+        auto: options.auto,
         enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
+        ai: {
+          apiKey: options.ai?.apiKey,
+          baseUrl: options.ai?.baseUrl,
+        },
       },
     )
 
