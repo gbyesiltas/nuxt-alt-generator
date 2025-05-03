@@ -1,13 +1,14 @@
 <script setup lang="ts">
-const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=webp'
+
 </script>
 
 <template>
   <div>
-    <img
-      :src
-      width="300"
-    >
+    <nav>
+      <NuxtLink to="/ssr">SSR</NuxtLink>
+      <NuxtLink to="/csr">CSR</NuxtLink>
+    </nav>
+    <NuxtPage />
   </div>
 </template>
 
@@ -15,5 +16,10 @@ const src = 'https://pbs.twimg.com/media/GpuVQ1AWEAAIJc5?format=webp'
 body {
   background: black;
   color: lightgray;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
 }
 </style>
