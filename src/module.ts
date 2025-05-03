@@ -41,7 +41,6 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.altGenerator = defu(
       nuxt.options.runtimeConfig.altGenerator || {},
       {
-        auto: options.auto,
         enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
         ai: {
           apiKey: options.ai?.apiKey,
@@ -64,8 +63,10 @@ export default defineNuxtModule<ModuleOptions>({
       from: resolver.resolve('runtime/composables/useGenerateAltText'),
     })
 
-    // @todo app:resolve for spa
+    // @todo spa
     // @todo prerender for static site generation
-    addServerPlugin(resolver.resolve('./runtime/server/plugins/addAltToImages'))
+    if (options.auto) {
+      addServerPlugin(resolver.resolve('./runtime/server/plugins/addAltToImages'))
+    }
   },
 })
