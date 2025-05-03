@@ -13,22 +13,5 @@ export default defineCachedEventHandler(async (event) => {
     })
   }
 
-  const response = await generateAltTextFromImage({ src, lang }, event)
-
-  // @todo don't cache if the response is an error?
-  if (response.error) {
-    throw createError({
-      statusCode: 424,
-      statusMessage: response.error.message,
-    })
-  }
-
-  if (response.output_text === 'ERROR') {
-    throw createError({
-      statusCode: 424,
-      statusMessage: 'Unable to load the image',
-    })
-  }
-
-  return response.output_text
+  return await generateAltTextFromImage({ src, lang }, event)
 })

@@ -3,6 +3,8 @@ import { defu } from 'defu'
 
 // Module options TypeScript interface definition
 export interface ModuleOptions {
+  enabled?: boolean
+  auto?: boolean
   ai: {
     apiKey: string
     baseUrl: string
@@ -13,19 +15,18 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'nuxt-alt-generator',
     configKey: 'altGenerator',
-    // @todo look other options
   },
   // Default configuration options of the Nuxt module
-  defaults: {},
+  defaults: {
+    auto: true,
+  },
   setup(options, nuxt) {
-    // Register the apiKey in the runtime config
+    // Merge module options with runtime config
     nuxt.options.runtimeConfig.altGenerator = defu(
       nuxt.options.runtimeConfig.altGenerator || {},
       {
-        ai: {
-          apiKey: options.ai?.apiKey,
-          baseUrl: options.ai?.baseUrl,
-        },
+        ...options,
+        enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
       },
     )
 

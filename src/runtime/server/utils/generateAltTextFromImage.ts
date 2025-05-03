@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3'
 import { getOpenAI } from './openai'
-import { defineCachedFunction } from '#imports'
+import { createError, defineCachedFunction, useRuntimeConfig } from '#imports'
 
 const SYSTEM_PROMPT = `
   You will be given an image and a language. 
@@ -16,9 +16,13 @@ type Parameters = {
 
 export const generateAltTextFromImage = defineCachedFunction(
   async ({ src, lang }: Parameters, event: H3Event) => {
+    if (!useRuntimeConfig(event).altGenerator.enabled) {
+      return `Example generated alt text for ${src} in ${lang}`
+    }
+
     const instance = getOpenAI(event)
 
-    return await instance.responses.create({
+    const response = await instance.responses.create({
     // @todo: add support for other models
       model: 'gpt-4.1-nano',
       temperature: 0.1,
@@ -44,6 +48,12 @@ export const generateAltTextFromImage = defineCachedFunction(
         },
       ],
     })
+
+    if (response.error) {
+      throw createError(response.error)
+    }
+
+    return response.output_text
   }, {
     // @todo make this configurable
     maxAge: 1000 * 60 * 60 * 24, // 1 day

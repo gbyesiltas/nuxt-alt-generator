@@ -1,7 +1,7 @@
 import type { H3Event } from 'h3'
 import * as cheerio from 'cheerio'
 import { generateAltTextFromImage } from '../utils/generateAltTextFromImage'
-import { defineNitroPlugin } from '#imports'
+import { defineNitroPlugin, useRuntimeConfig } from '#imports'
 
 const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) => {
   const promises = htmlBody.map(async (root) => {
@@ -22,7 +22,7 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
         event,
       )
 
-      $(image).attr('alt', response.output_text)
+      $(image).attr('alt', response)
     })
 
     await Promise.all(altPromises)
@@ -33,8 +33,11 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
 }
 
 export default defineNitroPlugin((nitroApp) => {
-  // @todo make this a config option
   nitroApp.hooks.hook('render:html', async (html, { event }) => {
-    html.body = await addAltToImagesFromHtmlBody(html.body, event)
+    const isAutoAltEnabled = useRuntimeConfig(event).altGenerator.enabled
+
+    if (isAutoAltEnabled) {
+      html.body = await addAltToImagesFromHtmlBody(html.body, event)
+    }
   })
 })
