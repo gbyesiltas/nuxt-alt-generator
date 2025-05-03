@@ -14,14 +14,19 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
         return
       }
 
-      const response = await generateAltTextFromImage(
-        {
-          src,
-        },
-        event,
-      )
+      try {
+        const response = await generateAltTextFromImage(
+          {
+            src,
+          },
+          event,
+        )
 
-      $(image).attr('alt', response)
+        $(image).attr('alt', response)
+      }
+      catch {
+        console.warn('Error generating alt text for image:', src, '\nContinuing...')
+      }
     })
 
     await Promise.all(altPromises)
