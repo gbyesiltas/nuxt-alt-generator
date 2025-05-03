@@ -1,14 +1,22 @@
 import { generateAltTextFromImage } from '../../utils/generateAltTextFromImage'
-import { createError, defineCachedEventHandler, readBody } from '#imports'
+import { createError, defineEventHandler, readBody, useRuntimeConfig } from '#imports'
 
-// @todo somehow make this only accessible from our client and/or make the endpoint a config option
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const src = (await readBody(event))?.src
 
   if (!src) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Missing src parameter',
+    })
+  }
+
+  const allowedSrcPatterns = useRuntimeConfig(event).altGenerator.allowedSrcPatterns
+
+  if (allowedSrcPatterns && !allowedSrcPatterns.some((pattern: string) => new RegExp(pattern).test(src))) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'src parameter does not match allowed patterns',
     })
   }
 

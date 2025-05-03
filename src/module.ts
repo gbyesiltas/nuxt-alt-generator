@@ -17,6 +17,12 @@ export interface ModuleOptions {
    * @default true
    */
   auto?: boolean
+  /**
+   * List of allowed image src patterns to generate alt text for. This will only be checked for requests coming from the client.
+   *
+   * You can for example set the base url of your image provider so that other people can't just use your endpoint and use your AI resources.
+   */
+  allowedSrcPatterns?: string[]
   ai: {
     apiKey: string
     baseUrl?: string
@@ -42,6 +48,7 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.runtimeConfig.altGenerator || {},
       {
         enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
+        allowedSrcPatterns: options.allowedSrcPatterns,
         ai: {
           apiKey: options.ai?.apiKey,
           baseUrl: options.ai?.baseUrl,
