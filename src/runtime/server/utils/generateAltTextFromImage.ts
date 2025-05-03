@@ -2,10 +2,12 @@ import type { H3Event } from 'h3'
 import { getOpenAI } from './openai'
 import { createError, defineCachedFunction, useRuntimeConfig } from '#imports'
 
-const SYSTEM_PROMPT = `
+const getSystemPropmt = (context: string) => `
   You will be given an image and a language. 
   You will return the alt text for it taking into account best SEO and accessibility practices in the given language.
   
+  ${context && 'While generating the alt text, take into account the context of the website for including the relevant key-words.' + '\'' + context + '\''}
+
   Only return the alt text, do not add any other text.
   `
 
@@ -23,7 +25,9 @@ const getAcceptLanguageHeader = (event: H3Event) => {
 
 export const generateAltTextFromImage = defineCachedFunction(
   async ({ src }: Parameters, event: H3Event) => {
-    if (!useRuntimeConfig(event).altGenerator.enabled) {
+    const runtimeConfig = useRuntimeConfig(event).altGenerator
+
+    if (!runtimeConfig.enabled) {
       return `Example generated alt text for ${src}`
     }
 
@@ -37,7 +41,7 @@ export const generateAltTextFromImage = defineCachedFunction(
       input: [
         {
           role: 'user',
-          content: SYSTEM_PROMPT,
+          content: getSystemPropmt(runtimeConfig.ai.context),
         },
         {
           role: 'user',

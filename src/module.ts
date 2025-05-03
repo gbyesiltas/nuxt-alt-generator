@@ -26,6 +26,12 @@ export interface ModuleOptions {
   ai: {
     apiKey: string
     baseUrl?: string
+    /**
+     * The context of the website. This will be used to generate more relevant alt text.
+     *
+     * @example "This is a website that sells shoes"
+     */
+    context?: string
   }
 }
 
@@ -50,6 +56,7 @@ export default defineNuxtModule<ModuleOptions>({
         enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
         allowedSrcPatterns: options.allowedSrcPatterns,
         ai: {
+          context: options.ai?.context,
           apiKey: options.ai?.apiKey,
           baseUrl: options.ai?.baseUrl,
         },
