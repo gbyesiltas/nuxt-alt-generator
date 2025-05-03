@@ -13,6 +13,7 @@ type Parameters = {
   src: string
 }
 
+// @todo: add support for setting the language in the request?
 const getAcceptLanguageHeader = (event: H3Event) => {
   const acceptLanguageHeader = event.node.req.headers['accept-language']
 
@@ -42,7 +43,7 @@ export const generateAltTextFromImage = defineCachedFunction(
           content: [
             {
               type: 'input_image',
-              image_url: src,
+              image_url: src, // @todo add support for local images?
               detail: 'low',
             },
             {
