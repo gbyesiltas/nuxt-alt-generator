@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   altGenerator: {
     enabled: true,
+    auto: true,
     ai: {
       apiKey: '',
       baseUrl: '',

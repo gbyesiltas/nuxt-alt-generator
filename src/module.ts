@@ -14,7 +14,7 @@ export interface ModuleOptions {
   /**
    * Whether to automatically generate and inject alt text for images in server-rendered pages.
    *
-   * @default true
+   * @default false
    */
   auto?: boolean
   /**
@@ -36,7 +36,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {
-    auto: true,
+    auto: false,
     ai: {
       apiKey: '',
       baseUrl: '',
