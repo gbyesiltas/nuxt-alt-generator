@@ -15,7 +15,7 @@ This is a Nuxt module that allows tools to automatically generate alt text for i
 - ⚙️ Can automatically generate and inject alt text to images on the server-side response of your Nuxt application.
 - 🪭 Provides a `useGenerateAltText` composable to generate alt text for a given image src.
 - 🌐 Automatically detects the language to generate the alt text in based on the `Accept-Language` header.
-- 💨 Caches the generated alt text for every image for optimised performance and AI costs. 
+- 💨 Caches the generated alt text for every image for optimised performance and AI costs. The cache time is 1 year for a given src+lang combo. Beware that this cache will most likely reset after a new deployment since the module currently does not include any Database storage etc.
 - ℹ️ You can provide context to the AI to generate more accurate alt text for more relevant key-words.
 
 ## Quick Setup
