@@ -17,7 +17,6 @@ const addAltToImagesFromHtmlBody = async (htmlBody: string[], event: H3Event) =>
       const response = await generateAltTextFromImage(
         {
           src,
-          lang: 'en', // @todo config option or nuxt-i18n connection
         },
         event,
       )

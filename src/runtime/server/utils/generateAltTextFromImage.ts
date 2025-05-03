@@ -11,13 +11,18 @@ const SYSTEM_PROMPT = `
 
 type Parameters = {
   src: string
-  lang: string
+}
+
+const getAcceptLanguageHeader = (event: H3Event) => {
+  const acceptLanguageHeader = event.node.req.headers['accept-language']
+
+  return acceptLanguageHeader || 'en'
 }
 
 export const generateAltTextFromImage = defineCachedFunction(
-  async ({ src, lang }: Parameters, event: H3Event) => {
+  async ({ src }: Parameters, event: H3Event) => {
     if (!useRuntimeConfig(event).altGenerator.enabled) {
-      return `Example generated alt text for ${src} in ${lang}`
+      return `Example generated alt text for ${src}`
     }
 
     const instance = getOpenAI(event)
@@ -42,7 +47,7 @@ export const generateAltTextFromImage = defineCachedFunction(
             },
             {
               type: 'input_text',
-              text: `Language code: ${lang}`,
+              text: `Language code: ${getAcceptLanguageHeader(event)}`,
             },
           ],
         },
@@ -55,7 +60,6 @@ export const generateAltTextFromImage = defineCachedFunction(
 
     return response.output_text
   }, {
-    // @todo make this configurable
     maxAge: 1000 * 60 * 60 * 24, // 1 day
-    getKey: ({ src, lang }) => `generated-alt:${src}:${lang}`,
+    getKey: ({ src }, event) => `generated-alt:${src}:${getAcceptLanguageHeader(event)}`,
   })
