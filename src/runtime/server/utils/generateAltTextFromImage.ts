@@ -14,8 +14,9 @@ type Parameters = {
 }
 
 // @todo: add support for setting the language in the request?
+// @todo: test with nuxt-i18n
 const getAcceptLanguageHeader = (event: H3Event) => {
-  const acceptLanguageHeader = event.node.req.headers['accept-language']
+  const acceptLanguageHeader = event.node.req.headers['accept-language']?.split(',')[0]
 
   return acceptLanguageHeader || 'en'
 }
