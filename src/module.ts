@@ -24,7 +24,13 @@ export interface ModuleOptions {
    */
   allowedSrcPatterns?: string[]
   ai: {
+    /**
+     * The OpenAI API key to use for generating alt text.
+     */
     apiKey: string
+    /**
+     * Override the default base URL for the OpenAI API.
+     */
     baseUrl?: string
     /**
      * The context of the website. This will be used to generate more relevant alt text.

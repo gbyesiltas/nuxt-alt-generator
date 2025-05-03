@@ -5,7 +5,7 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-This is a Nuxt module that allows tools to automatically generate alt text for images in your Nuxt application. It uses the [OpenAI API](https://platform.openai.com) to generate alt text based on the content of the image.
+This is a Nuxt module that allows tools to automatically generate alt text for images in your Nuxt application. It uses the [OpenAI API](https://platform.openai.com) to generate alt text based on the content of the image. It uses OpenAI's `gpt-4.1-nano` model.
 
 
 ⚠️ **This module is in early development and may include frequent breaking changes. Any contribution is welcome.** ⚠️
@@ -30,13 +30,29 @@ npx nuxi module add nuxt-alt-generator
 2. Add your OpenAI API key to your `.env` file or to your `nuxt.config.ts` file:
 ```bash
 # .env
-NUXT_ALT_GENERATOR_AI_API_KEY=example
+NUXT_ALT_GENERATOR_AI_API_KEY=example # OpenAI API key
+```
 NUXT_ALT_GENERATOR_AI_BASE_URL=https://example.com # Optional
 ```
 
 
 That's it! You can now use the module in your Nuxt app ✨
 
+## Configuration options
+### `auto`
+If you enable the `auto` option in the module configuration, the module will automatically generate alt text for images that do not have one and inject it on server-side renders.
+
+### `enabled`
+By default, the module will not make AI calls to generate alt text while on development mode but instead will provide a mock text. By setting this option to `true` you can enable the module to make AI calls even in development mode.
+
+### `ai.context`
+You can provide a context to the AI about your website so that it can generate more relevant alt text with more relevant key-words.
+
+### `ai.apiKey`
+You can either provide your OpenAI API key in the `.env` file or in the module configuration. If you don't provide either, the module will not work.
+
+### `ai.baseUrl`
+You can provide a custom base URL for the OpenAI API.
 
 ## Contribution
 
