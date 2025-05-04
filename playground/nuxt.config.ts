@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   altGenerator: {
     enabled: true,
     auto: true,
+    allowedExternalSrcPatterns: ['https://pbs.twimg.com/media/*'],
     ai: {
       apiKey: '',
       baseUrl: '',

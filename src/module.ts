@@ -18,11 +18,11 @@ export interface ModuleOptions {
    */
   auto?: boolean
   /**
-   * List of allowed image src patterns to generate alt text for. This will only be checked for requests coming from the client.
+   * List of allowed external image src patterns to generate alt text for. The local public asset paths are always allowed. You can for example set the base url of your image provider.
    *
-   * You can for example set the base url of your image provider so that other people can't just use your endpoint and use your AI resources.
+   * This will only be checked for requests coming from the client.
    */
-  allowedSrcPatterns?: string[]
+  allowedExternalSrcPatterns?: string[]
   ai: {
     /**
      * The OpenAI API key to use for generating alt text.
@@ -49,6 +49,7 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {
     auto: false,
+    allowedExternalSrcPatterns: [],
     ai: {
       apiKey: '',
       baseUrl: '',
@@ -60,7 +61,8 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt.options.runtimeConfig.altGenerator || {},
       {
         enabled: options.enabled ?? !nuxt.options.dev, // Disable by default in dev mode
-        allowedSrcPatterns: options.allowedSrcPatterns,
+        allowedExternalSrcPatterns: options.allowedExternalSrcPatterns,
+        publicDir: nuxt.options.dir.public,
         ai: {
           context: options.ai?.context,
           apiKey: options.ai?.apiKey,
@@ -70,7 +72,6 @@ export default defineNuxtModule<ModuleOptions>({
     )
 
     const resolver = createResolver(import.meta.url)
-
     addServerHandler({
       route: '/api/__alt__/generate',
       handler: resolver.resolve('./runtime/server/api/__alt__/generate.post'),

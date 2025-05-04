@@ -1,6 +1,8 @@
 import type { H3Event } from 'h3'
+
 import { getOpenAI } from './openai'
-import { createError, defineCachedFunction, useRuntimeConfig } from '#imports'
+import getIsLocalPath from './getIsLocalPath'
+import { __buildAssetsURL, __publicAssetsURL, createError, defineCachedFunction, useRuntimeConfig } from '#imports'
 
 const getSystemPropmt = (context: string) => `
   You will be given an image and a language. 
@@ -21,6 +23,22 @@ const getAcceptLanguageHeader = (event: H3Event) => {
   const acceptLanguageHeader = event.node.req.headers['accept-language']?.split(',')[0]
 
   return acceptLanguageHeader || 'en'
+}
+
+const getInputImageUrl = (src: string, event: H3Event) => {
+  const isLocalPublicImage = getIsLocalPath(src)
+  const host = event.node.req.headers['host']
+
+  if (isLocalPublicImage && host) {
+    if (import.meta.dev) {
+      console.warn('Local public images in dev mode are not yet supported.')
+      return src
+    } {
+      return new URL(src, host).toString()
+    }
+  }
+
+  return src
 }
 
 export const generateAltTextFromImage = defineCachedFunction(
@@ -48,7 +66,7 @@ export const generateAltTextFromImage = defineCachedFunction(
           content: [
             {
               type: 'input_image',
-              image_url: src, // @todo add support for local images?
+              image_url: getInputImageUrl(src, event),
               detail: 'low',
             },
             {

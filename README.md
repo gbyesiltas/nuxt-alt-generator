@@ -44,10 +44,12 @@ If you enable the `auto` option in the module configuration, the module will aut
 ### `enabled`
 By default, the module will not make AI calls to generate alt text while on development mode but instead will provide a mock text. By setting this option to `true` you can enable the module to make AI calls even in development mode.
 
-### `allowedSrcPatterns`
+### `allowedExternalSrcPatterns`
 ⚠️ Good to know for **security** ⚠️
 
-Since this module exposes an endpoint to generate alt text for a given image src, you can restrict the src patterns that are allowed to be used with the endpoint to avoid people possibly abusing your OpenAI usage. By default, all src patterns are allowed.
+Since this module exposes an endpoint to generate alt text for a given image src, you can restrict the src patterns that are allowed to be used with the endpoint to avoid people possibly abusing your OpenAI usage. 
+
+By default, only the local public assets are always allowed.
 
 The alt text generation is cached for 1 year, so it will not hit the OpenAI API every time you call the endpoint. This means if someone is only able to use the endpoint for your specific image domains, they will only be able to pre-generate alt text for those images for you 🤷.
 

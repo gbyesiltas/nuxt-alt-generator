@@ -1,4 +1,5 @@
 import { generateAltTextFromImage } from '../../utils/generateAltTextFromImage'
+import getIsLocalPath from '../../utils/getIsLocalPath'
 import { createError, defineEventHandler, readBody, useRuntimeConfig } from '#imports'
 
 export default defineEventHandler(async (event) => {
@@ -11,9 +12,9 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const allowedSrcPatterns = useRuntimeConfig(event).altGenerator.allowedSrcPatterns
+  const allowedExternalSrcPatterns = useRuntimeConfig(event).altGenerator.allowedExternalSrcPatterns
 
-  if (allowedSrcPatterns && !allowedSrcPatterns.some((pattern: string) => new RegExp(pattern).test(src))) {
+  if (!getIsLocalPath(src) && !allowedExternalSrcPatterns?.some((pattern: string) => new RegExp(pattern).test(src))) {
     throw createError({
       statusCode: 403,
       statusMessage: 'src parameter does not match allowed patterns',

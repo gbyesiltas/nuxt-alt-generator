@@ -3,7 +3,7 @@ definePageMeta({
   ssr: false,
 })
 
-const src = 'https://pbs.twimg.com/media/GqAg6smXgAA8d_2?format=jpg'
+const src = 'https://pbs.twimg.com/media/GqAg6smXgAA8d_2?format=webp'
 
 const { alt } = useGenerateAltText({
   src,
