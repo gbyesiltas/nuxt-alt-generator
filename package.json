@@ -1,6 +1,6 @@
 {
   "name": "nuxt-alt-generator",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Nuxt module that generates alt text for images using AI",
   "repository": "gbyesiltas/nuxt-alt-generator",
   "keywords": [
