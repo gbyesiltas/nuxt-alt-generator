@@ -3,6 +3,15 @@
   "version": "0.0.3",
   "description": "Nuxt module that generates alt text for images using AI",
   "repository": "gbyesiltas/nuxt-alt-generator",
+  "keywords": [
+    "nuxt",
+    "nuxt-module",
+    "alt-text",
+    "accessibility",
+    "seo",
+    "image",
+    "ai"
+  ],
   "license": "MIT",
   "type": "module",
   "exports": {
